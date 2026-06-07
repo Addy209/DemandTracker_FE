@@ -22,9 +22,31 @@ const CreateDemandInputFields = (props) => {
   const textareaRef = React.useRef(null);
 
   const formatText = (command) => {
-    textareaRef.current?.focus();
-    document.execCommand(command);
-    setValue(textareaRef.current.innerHTML);
+    // textareaRef.current?.focus();
+    // document.execCommand(command);
+    // props.setValue(textareaRef.current.innerHTML);
+    const selection = window.getSelection();
+    if (!selection.rangeCount || selection.isCollapsed) return;
+    const range = selection.getRangeAt(0);
+    const strong = document.createElement(command);
+    strong.appendChild(range.extractContents());
+    range.insertNode(strong);
+    props.setValue(textareaRef.current.innerHTML);
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData("text/plain");
+    setIsEmpty(false);
+    // document.execCommand("insertText", false, text);
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(text));
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    props.setValue(textareaRef.current.innerHTML);
   };
   const style = {
     width: props.width,
@@ -32,7 +54,7 @@ const CreateDemandInputFields = (props) => {
     color: theme.palette.text.primary,
     border: `1px solid ${theme.palette.border.primary}`,
   };
-  console.log(value);
+  // console.log(value);
 
   if (props.type === "color") {
     return (
@@ -141,6 +163,7 @@ const CreateDemandInputFields = (props) => {
           },
         }}
         variant="solid"
+        color="neutral"
       >
         {props.options.map((item, index) => (
           <Option
@@ -173,7 +196,7 @@ const CreateDemandInputFields = (props) => {
   if (props.type === "textarea") {
     return (
       <Stack direction="column" gap={1} sx={{ position: "relative" }}>
-        <Box sx={{ position: "absolute", bottom: 0, right: 0, p: 0.5 }}>
+        <Box sx={{ position: "absolute", bottom: 0, right: "1rem", p: 0.5 }}>
           <IconButton
             sx={{
               color: theme.palette.button.primary,
@@ -185,7 +208,7 @@ const CreateDemandInputFields = (props) => {
               },
             }}
             onClick={() => {
-              formatText("bold");
+              formatText("strong");
             }}
           >
             <FaBold />
@@ -201,7 +224,7 @@ const CreateDemandInputFields = (props) => {
               },
             }}
             onClick={() => {
-              formatText("italic");
+              formatText("em");
             }}
           >
             <FaItalic />
@@ -217,7 +240,7 @@ const CreateDemandInputFields = (props) => {
               },
             }}
             onClick={() => {
-              formatText("underline");
+              formatText("u");
             }}
           >
             <FaUnderline />
@@ -229,8 +252,9 @@ const CreateDemandInputFields = (props) => {
           ref={textareaRef}
           suppressContentEditableWarning={true}
           placeholder={props.placeholder}
-          minRows={5}
-          maxRows={8}
+          onPaste={(e) => {
+            handlePaste(e);
+          }}
           onInput={(e) => {
             setIsEmpty(e.currentTarget.textContent.trim() === "");
             props.setValue(textareaRef.current.innerHTML);
@@ -238,6 +262,8 @@ const CreateDemandInputFields = (props) => {
           sx={{
             ...style,
             height: "20dvh",
+            maxHeight: "20dvh",
+            overflowY: "scroll",
             borderRadius: "0.5rem",
             p: 1,
             "&::before": {
@@ -249,6 +275,22 @@ const CreateDemandInputFields = (props) => {
               color: theme.palette.text.secondary,
               pointerEvents: "none",
             },
+            "&::-webkit-scrollbar": {
+              width: "4px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: theme.palette.background.body,
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#c73636",
+              borderRadius: "4px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555",
+            },
+
+            scrollbarWidth: "none",
+            scrollbarColor: "#888 #f1f1f1",
           }}
         />
       </Stack>

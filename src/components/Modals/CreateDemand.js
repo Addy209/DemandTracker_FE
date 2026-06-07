@@ -26,6 +26,8 @@ const CreateDemand = ({ open, setOpen, user }) => {
   const [color, setColor] = React.useState(accentColor[0]);
 
   const handleSubmit = async () => {
+    console.log(demandDescription);
+
     if (
       demandId &&
       projectId &&

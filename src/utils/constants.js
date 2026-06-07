@@ -1,5 +1,6 @@
 export const CREATE = "CREATE";
 export const UPDATE = "UPDATE";
+export const COMPLETED_VALUE = "6";
 
 export const accentColor = [
   "#38bdf8",

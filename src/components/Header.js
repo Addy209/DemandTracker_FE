@@ -1,8 +1,9 @@
-import { Button, Stack, Typography, useTheme } from "@mui/joy";
+import { Box, Button, Stack, Typography, useTheme } from "@mui/joy";
 import React from "react";
 import CreateDemand from "./Modals/CreateDemand";
+import { cleanHTMLString } from "../utils/utilFunc";
 
-const Header = ({ pageTitle, pageSubTitle, pageIndex }) => {
+const Header = ({ pageTitle, pageSubTitle, pageIndex, isHtml }) => {
   const theme = useTheme();
   const [createDemandModalOpen, setCreateDemandModalOpen] =
     React.useState(false);
@@ -15,20 +16,37 @@ const Header = ({ pageTitle, pageSubTitle, pageIndex }) => {
     >
       <Stack direction="column" sx={{ alignItems: "flex-start" }}>
         <Typography
-          level="h3"
+          level={pageIndex === 1 ? "h4" : "h3"}
           sx={{
             fontFamily: "'DM Serif Display', monospace;",
             fontWeight: "100",
+            textAlign: "justify",
           }}
         >
           {pageTitle}
         </Typography>
-        <Typography
-          level="body-xs"
-          sx={{ color: theme.vars.palette.text.secondary, fontWeight: "300" }}
-        >
-          {pageSubTitle}
-        </Typography>
+
+        {isHtml ? (
+          <Box
+            dangerouslySetInnerHTML={{ __html: cleanHTMLString(pageSubTitle) }}
+            sx={{
+              fontSize: "0.8rem",
+              color: theme.palette.text.secondary,
+              textAlign: "justify",
+            }}
+          />
+        ) : (
+          <Typography
+            level="body-xs"
+            sx={{
+              color: theme.vars.palette.text.secondary,
+              fontWeight: "300",
+              textAlign: "justify",
+            }}
+          >
+            {pageSubTitle}
+          </Typography>
+        )}
       </Stack>
       {pageIndex === 0 ? (
         <Stack>
