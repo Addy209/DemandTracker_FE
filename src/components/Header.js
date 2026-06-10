@@ -33,6 +33,8 @@ const Header = ({ pageTitle, pageSubTitle, pageIndex, isHtml }) => {
               fontSize: "0.8rem",
               color: theme.palette.text.secondary,
               textAlign: "justify",
+              wordBreak: "break-word",
+              whiteSpace: "wrap",
             }}
           />
         ) : (

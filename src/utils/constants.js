@@ -1,6 +1,7 @@
 export const CREATE = "CREATE";
 export const UPDATE = "UPDATE";
 export const COMPLETED_VALUE = "6";
+export const MAX_CAHRACTERS_IN_DEMAND_CREATE = 500;
 
 export const accentColor = [
   "#38bdf8",
