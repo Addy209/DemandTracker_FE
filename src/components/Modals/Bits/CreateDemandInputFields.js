@@ -275,10 +275,12 @@ const CreateDemandInputFields = (props) => {
             position: "absolute",
             bottom: 0,
             right: 0,
-            p: 0.25,
+            p: 0.3,
             backgroundColor: theme.palette.background.body,
             width: "100%",
-            borderRadius: "0.5rem",
+            mb: 0.1,
+            borderBottomRightRadius: "0.5rem",
+            borderBottomLeftRadius: "0.5rem",
           }}
         >
           <Box

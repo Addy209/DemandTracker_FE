@@ -80,7 +80,6 @@ const UserAdd = ({ setProceed, setProceedFurther }) => {
           component="h4"
           id="modal-title"
           level="title-lg"
-          textColor="inherit"
           sx={{
             // fontWeight: "lg",
             mb: 1,

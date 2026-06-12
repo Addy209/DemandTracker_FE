@@ -65,7 +65,7 @@ const Filters = () => {
           }
           return (
             <Box
-              index={item}
+              key={item}
               onClick={() => {
                 setActive(item);
               }}

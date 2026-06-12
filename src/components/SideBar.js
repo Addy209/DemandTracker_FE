@@ -28,7 +28,7 @@ const SideBar = () => {
     setActiveIndex(index);
   };
   return (
-    <Stack direction="column" textColor="inherit" sx={{ height: "100%" }}>
+    <Stack direction="column" sx={{ height: "100%" }}>
       <Box sx={{ p: 3 }}>
         <Typography
           level="h3"

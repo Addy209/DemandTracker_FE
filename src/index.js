@@ -30,20 +30,17 @@ const theme = extendTheme({
         },
       },
     },
-    dark: {
-      palette: {
-        text: {
-          primary: "black",
-        },
-      },
-    },
   },
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <CssVarsProvider theme={theme} defaultMode="dark" disableTransitionOnChange>
+    <CssVarsProvider
+      theme={theme}
+      defaultMode="light"
+      disableTransitionOnChange
+    >
       <CssBaseline />
       <App />
     </CssVarsProvider>

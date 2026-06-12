@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import React from "react";
-import { Box, Stack, Typography, useTheme } from "@mui/joy";
+import { Box, Stack, Typography, useColorScheme, useTheme } from "@mui/joy";
 import UserAdd from "./components/Modals/UserAdd";
 import SideBar from "./components/SideBar";
 import { useActiveIndexStore } from "./store/state";
@@ -14,6 +14,7 @@ function App() {
   const [proceed, setProceed] = React.useState(true);
   const [proceedFurther, setProceedFurther] = React.useState(false);
   const { activeIndex } = useActiveIndexStore();
+  const { setMode } = useColorScheme();
   const theme = useTheme();
   const pages = [
     <DemandDashboard />,
@@ -21,6 +22,9 @@ function App() {
     <Completed />,
     <Settings />,
   ];
+  React.useEffect(() => {
+    setMode("light");
+  }, [setMode]);
   return (
     <Stack className="App" direction="row">
       {proceed ? (

@@ -5,6 +5,9 @@ import { cleanHTMLString } from "../utils/utilFunc";
 
 const Header = ({ pageTitle, pageSubTitle, pageIndex, isHtml }) => {
   const theme = useTheme();
+  console.log(theme.palette);
+  console.log(theme.vars);
+
   const [createDemandModalOpen, setCreateDemandModalOpen] =
     React.useState(false);
   return (
