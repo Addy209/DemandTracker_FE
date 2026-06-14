@@ -29,3 +29,13 @@ export const getDashboardStats = async () => {
     return { proceed: false };
   }
 };
+
+export const getDemandById = async (projectId) => {
+  try {
+    const response = await API.get("/projects/demandDetails/" + projectId);
+    return { ...response.data };
+  } catch (error) {
+    console.error("Error fetching details:", error);
+    return { proceed: false };
+  }
+};

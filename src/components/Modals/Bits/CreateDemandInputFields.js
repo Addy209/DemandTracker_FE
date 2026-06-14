@@ -248,19 +248,6 @@ const CreateDemandInputFields = (props) => {
               color: theme.palette.text.secondary,
               pointerEvents: "none",
             },
-            "&::-webkit-scrollbar": {
-              width: "4px",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: theme.palette.background.body,
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#c73636",
-              borderRadius: "4px",
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-              backgroundColor: "#555",
-            },
 
             scrollbarWidth: "none",
             scrollbarColor: "#888 #f1f1f1",

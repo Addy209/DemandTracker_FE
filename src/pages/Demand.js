@@ -1,10 +1,11 @@
-import { IconButton, Stack, useTheme } from "@mui/joy";
+import { Box, IconButton, Stack, useTheme } from "@mui/joy";
 import React from "react";
 import Header from "../components/Header";
 import { useDemands } from "../store/state";
 import { TiArrowBack } from "react-icons/ti";
 import HeaderWithBackButton from "../components/HeaderWithBackButton";
 import DemandDetails from "../components/DemandDetails";
+import Meta from "../components/Meta";
 
 const Demand = ({ index, setDemandDetails }) => {
   const { demandCards } = useDemands();
@@ -16,8 +17,23 @@ const Demand = ({ index, setDemandDetails }) => {
         demand={demand}
         setDemandDetails={setDemandDetails}
       />
-      <Stack sx={{ pl: 8, pr: 3, pt: 1 }}>
-        <DemandDetails demand={demand} />
+      <Stack
+        direction={"row"}
+        sx={{ pl: 8, pr: 3, pt: 1, mt: 1, height: "80vh" }}
+        gap={2}
+      >
+        <Stack direction={"column"} gap={2} width={"40%"} height={"100%"}>
+          <Box>
+            <DemandDetails demandDetails={demand} />
+          </Box>
+          <Box sx={{ flex: 1, overflowY: "auto" }}>
+            <Meta demandDetails={demand} height={"100%"} />
+          </Box>
+        </Stack>
+
+        <Box sx={{ width: "60%" }}>
+          <Meta demandDetails={demand} height={"100%"} />
+        </Box>
       </Stack>
     </Stack>
   );

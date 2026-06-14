@@ -48,7 +48,7 @@ function App() {
             <SideBar />
             {console.log(window.innerWidth)}
           </Stack>
-          <Stack direction="column" sx={{ width: "87%", height: "100dvh" }}>
+          <Stack direction="column" sx={{ width: "86%", height: "100dvh" }}>
             {pages[activeIndex]}
           </Stack>
         </>

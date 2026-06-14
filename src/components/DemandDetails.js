@@ -1,26 +1,53 @@
 import {
   Box,
   Grid,
+  IconButton,
+  Input,
   Option,
   Select,
   Sheet,
   Stack,
+  Tooltip,
   Typography,
   useTheme,
 } from "@mui/joy";
 import React from "react";
 import { useStatus } from "../store/state";
+import { getDemandById } from "../utils/APIs/project";
+import { BsFillCalendarDateFill } from "react-icons/bs";
+import { COMPLETED_VALUE, UAT_START_VALUE } from "../utils/constants";
+import { FaCheck } from "react-icons/fa";
+import ConfirmSave from "./Modals/ConfirmSave";
 
-const DemandDetails = ({ demand }) => {
+const DemandDetails = ({ demandDetails }) => {
   const theme = useTheme();
-  console.log(demand);
+  const [demand, setDemand] = React.useState(demandDetails);
   const { status } = useStatus();
+  const [projectStatus, setProjectStatus] = React.useState(null);
+  const [projectCR, setProjectCR] = React.useState(null);
+  const [projectEecDone, setProjectEecDone] = React.useState(null);
+  const [projectEecPd, setProjectEecPd] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [modalData, setModalData] = React.useState({ value: "", type: "" });
+
+  React.useEffect(() => {
+    const fetchDemandDetails = async (id) => {
+      const result = await getDemandById(id);
+      if (result.status) setDemand(result.payload);
+    };
+    fetchDemandDetails(demand.projectId);
+  }, []);
 
   const style = {
-    width: "18ch",
+    width: "100%",
     backgroundColor: theme.palette.background.level1,
     color: theme.palette.text.primary,
     border: `1px solid ${theme.palette.border.primary}`,
+  };
+
+  const EECOptions = {
+    Yes: true,
+    No: false,
   };
 
   return (
@@ -45,109 +72,400 @@ const DemandDetails = ({ demand }) => {
           backgroundColor: demand.accentColor,
         }}
       />
-      <Typography level="title-lg" sx={{ textDecoration: "underline" }}>
-        Demand Details
-      </Typography>
-      <Grid
-        container
-        spacing={2}
+
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        sx={{ px: 1 }}
+      >
+        <Box>
+          <Typography level="title-lg" sx={{ textDecoration: "underline" }}>
+            Demand Details:
+          </Typography>
+        </Box>
+        <Box>
+          <Tooltip
+            title="Important Dates"
+            placement="left"
+            size="sm"
+            arrow
+            variant="solid"
+          >
+            <IconButton
+              sx={{
+                transition: "scale 0.2s ease-in",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                  scale: 0.9,
+                },
+              }}
+              size="lg"
+            >
+              <BsFillCalendarDateFill color={theme.palette.text.primary} />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Stack>
+      <Stack
+        direction={"column"}
+        gap={2}
         sx={{
-          p: 2,
+          py: 2,
+          px: 3,
           width: "100%",
         }}
       >
-        <Grid xs={12} sm={12} md={6} lg={3} alignSelf={"center"}>
-          <Stack direction={"row"} alignItems={"center"}>
-            <Typography level="title-md">Status:</Typography>&nbsp;
-            <Select
-              size="sm"
-              placeholder={"Change Status"}
-              defaultValue={demand.status}
-              onChange={(e, value) => {
-                // props.setValue(value);
-              }}
-              sx={{
-                ...style,
-                py: 0,
-                "&:hover": {
-                  ...style,
-                  backgroundColor: theme.palette.background.surface,
-                },
-              }}
-              slotProps={{
-                listbox: {
-                  sx: {
-                    p: 0,
-                    '&[role="option"]:hover': {
+        <Stack direction={"row"} alignItems={"center"} width={"100%"}>
+          <Stack
+            direction={"row"}
+            justifyContent={"flex-start"}
+            sx={{ width: "30%" }}
+          >
+            <Typography level="title-md">Status</Typography>
+          </Stack>
+          &nbsp;:&nbsp;
+          <Box sx={{ width: "70%" }}>
+            {demand.status === parseInt(COMPLETED_VALUE) ? (
+              <Typography level="body-md">demand.statusName</Typography>
+            ) : (
+              <Stack direction={"row"} width={"100%"} gap={1}>
+                <Select
+                  size="sm"
+                  placeholder={"Change Status"}
+                  defaultValue={demand.status}
+                  onChange={(e, value) => {
+                    setProjectStatus(value);
+                  }}
+                  sx={{
+                    ...style,
+
+                    py: 0,
+                    "&:hover": {
                       ...style,
                       backgroundColor: theme.palette.background.surface,
                     },
-                  },
-                },
-              }}
-              variant="solid"
-              color="neutral"
-            >
-              {Object.keys(status).map((item) => {
-                console.log(demand.status, item);
-
-                return (
-                  <Option
-                    value={parseInt(item)}
-                    key={item}
-                    sx={{
-                      ...style,
-                      "&.MuiOption-highlighted": {
-                        ...style,
-                        backgroundColor: theme.palette.background.surface,
+                  }}
+                  slotProps={{
+                    listbox: {
+                      sx: {
+                        p: 0,
+                        '&[role="option"]:hover': {
+                          ...style,
+                          backgroundColor: theme.palette.background.surface,
+                        },
                       },
+                    },
+                  }}
+                  variant="solid"
+                  color="neutral"
+                >
+                  {Object.keys(status).map((item) => {
+                    console.log(demand.status, item);
 
-                      '&.MuiOption-highlighted:not([aria-selected="true"])': {
-                        ...style,
-                        backgroundColor: theme.palette.background.surface,
-                      },
+                    return (
+                      <Option
+                        value={parseInt(item)}
+                        key={item}
+                        sx={{
+                          ...style,
+                          "&.MuiOption-highlighted": {
+                            ...style,
+                            backgroundColor: theme.palette.background.surface,
+                          },
 
-                      "&.Mui-selected": {
-                        ...style,
-                        backgroundColor: theme.palette.background.body,
-                      },
-                    }}
-                  >
-                    {status[item]}
-                  </Option>
-                );
-              })}
-            </Select>
+                          '&.MuiOption-highlighted:not([aria-selected="true"])':
+                            {
+                              ...style,
+                              backgroundColor: theme.palette.background.surface,
+                            },
+
+                          "&.Mui-selected": {
+                            ...style,
+                            backgroundColor: theme.palette.background.body,
+                          },
+                        }}
+                      >
+                        {status[item]}
+                      </Option>
+                    );
+                  })}
+                </Select>
+                <IconButton
+                  sx={{
+                    width: "10%",
+                    backgroundColor: theme.palette.button.primary,
+                    borderRadius: "0.5rem",
+                  }}
+                  size="sm"
+                  onClick={() => {
+                    setModalData((prev) => ({
+                      type: 1,
+                      value: projectStatus,
+                      label: status[projectStatus],
+                    }));
+                    setOpen(projectStatus ? true : false);
+                  }}
+                >
+                  <FaCheck />
+                </IconButton>
+              </Stack>
+            )}
+          </Box>
+        </Stack>
+
+        <Stack direction={"row"} alignItems={"center"} width={"100%"}>
+          <Stack
+            direction={"row"}
+            justifyContent={"flex-start"}
+            sx={{ width: "30%" }}
+          >
+            <Typography level="title-md">Priority</Typography>
           </Stack>
-        </Grid>
-
-        <Grid xs={12} sm={12} md={6} lg={3} alignSelf={"center"}>
-          <Stack direction={"row"} alignItems={"center"}>
-            <Typography level="title-md">Priority:</Typography>&nbsp;
+          &nbsp;:&nbsp;
+          <Box
+            sx={{ width: "70%", display: "flex", justifyContent: "flex-start" }}
+          >
             <Typography level="body-md">
               {demand.priority ? demand.priority : "Not Available"}
             </Typography>
+          </Box>
+        </Stack>
+
+        <Stack direction={"row"} alignItems={"center"} width={"100%"}>
+          <Stack
+            direction={"row"}
+            justifyContent={"flex-start"}
+            sx={{ width: "30%" }}
+          >
+            <Typography level="title-md">Created On</Typography>
           </Stack>
-        </Grid>
-        <Grid xs={12} sm={12} md={6} lg={3} alignSelf={"center"}>
-          <Stack direction={"row"} alignItems={"center"}>
-            <Typography level="title-md">TFS-CR:</Typography>&nbsp;
-            <Typography level="body-md">
-              {demand.cr ? demand.cr : "Not Available"}
-            </Typography>
-          </Stack>
-        </Grid>
-        <Grid xs={12} sm={12} md={6} lg={3} alignSelf={"center"}>
-          <Stack direction={"row"} alignItems={"center"}>
-            <Typography level="title-md">Created At:</Typography>&nbsp;
+          &nbsp;:&nbsp;
+          <Box
+            sx={{ width: "70%", display: "flex", justifyContent: "flex-start" }}
+          >
             <Typography level="body-md">
               {demand.createdAt
                 ? new Date(demand.createdAt).toDateString()
                 : "Not Available"}
             </Typography>
+          </Box>
+        </Stack>
+
+        <Stack direction={"row"} alignItems={"center"} width={"100%"}>
+          <Stack
+            direction={"row"}
+            justifyContent={"flex-start"}
+            sx={{ width: "30%" }}
+          >
+            <Typography level="title-md">CR Number</Typography>
           </Stack>
-        </Grid>
-      </Grid>
+          &nbsp;:&nbsp;
+          <Box
+            sx={{ width: "70%", display: "flex", justifyContent: "flex-start" }}
+          >
+            {demand.cr ? (
+              <Typography level="body-md">{demand.cr}</Typography>
+            ) : (
+              <Stack direction={"row"} width={"100%"} gap={1}>
+                <Input
+                  size="sm"
+                  type="text"
+                  placeholder="CR Number"
+                  sx={{
+                    ...style,
+                    backgroundColor: theme.palette.background.level1,
+                    color: theme.palette.text.primary,
+                  }}
+                  onChange={(e) => {
+                    setProjectCR(e.target.value);
+                  }}
+                />
+                <IconButton
+                  sx={{
+                    width: "10%",
+                    backgroundColor: theme.palette.button.primary,
+                    borderRadius: "0.5rem",
+                  }}
+                  size="sm"
+                  onClick={() => {
+                    setModalData((prev) => ({ type: 2, value: projectCR }));
+                    setOpen(projectCR ? true : false);
+                  }}
+                >
+                  <FaCheck />
+                </IconButton>
+              </Stack>
+            )}
+          </Box>
+        </Stack>
+
+        {demand.status > parseInt(UAT_START_VALUE) ? (
+          <>
+            <Stack direction={"row"} alignItems={"center"} width={"100%"}>
+              <Stack
+                direction={"row"}
+                justifyContent={"flex-start"}
+                sx={{ width: "30%" }}
+              >
+                <Typography level="title-md">EEC Done?</Typography>
+              </Stack>
+              &nbsp;:&nbsp;
+              <Box
+                sx={{
+                  width: "70%",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
+              >
+                {demand.eecDone ? (
+                  <Typography level="body-md"> Yes </Typography>
+                ) : (
+                  <Stack direction={"row"} width={"100%"} gap={1}>
+                    <Select
+                      size="sm"
+                      placeholder={"Change Status"}
+                      defaultValue={false}
+                      onChange={(e, value) => {
+                        setProjectEecDone(value);
+                      }}
+                      sx={{
+                        ...style,
+                        py: 0,
+                        "&:hover": {
+                          ...style,
+                          backgroundColor: theme.palette.background.surface,
+                        },
+                      }}
+                      slotProps={{
+                        listbox: {
+                          sx: {
+                            p: 0,
+                            '&[role="option"]:hover': {
+                              ...style,
+                              backgroundColor: theme.palette.background.surface,
+                            },
+                          },
+                        },
+                      }}
+                      variant="solid"
+                      color="neutral"
+                    >
+                      {Object.keys(EECOptions).map((item) => {
+                        return (
+                          <Option
+                            value={EECOptions[item]}
+                            key={item}
+                            sx={{
+                              ...style,
+                              "&.MuiOption-highlighted": {
+                                ...style,
+                                backgroundColor:
+                                  theme.palette.background.surface,
+                              },
+
+                              '&.MuiOption-highlighted:not([aria-selected="true"])':
+                                {
+                                  ...style,
+                                  backgroundColor:
+                                    theme.palette.background.surface,
+                                },
+
+                              "&.Mui-selected": {
+                                ...style,
+                                backgroundColor: theme.palette.background.body,
+                              },
+                            }}
+                          >
+                            {item}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                    <IconButton
+                      sx={{
+                        width: "10%",
+                        backgroundColor: theme.palette.button.primary,
+                        borderRadius: "0.5rem",
+                      }}
+                      size="sm"
+                      onClick={() => {
+                        setModalData((prev) => ({
+                          type: 3,
+                          value: projectEecDone,
+                          label: "Yes",
+                        }));
+                        setOpen(projectEecDone);
+                      }}
+                    >
+                      <FaCheck />
+                    </IconButton>
+                  </Stack>
+                )}
+              </Box>
+            </Stack>
+
+            <Stack direction={"row"} alignItems={"center"} width={"100%"}>
+              <Stack
+                direction={"row"}
+                justifyContent={"flex-start"}
+                sx={{ width: "30%" }}
+              >
+                <Typography level="title-md">EEC PD</Typography>
+              </Stack>
+              &nbsp;:&nbsp;
+              <Box
+                sx={{
+                  width: "70%",
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
+              >
+                {demand.eecPD ? (
+                  <Typography level="body-md">{demand.eecPD}</Typography>
+                ) : (
+                  <Stack direction={"row"} width={"100%"} gap={1}>
+                    <Input
+                      size="sm"
+                      type="text"
+                      placeholder="EEC PD"
+                      sx={{
+                        ...style,
+                        width: "90%",
+                        backgroundColor: theme.palette.background.level1,
+                        color: theme.palette.text.primary,
+                      }}
+                      onChange={(e) => {
+                        setProjectEecPd(e.target.value);
+                      }}
+                    />
+                    <IconButton
+                      sx={{
+                        width: "10%",
+                        backgroundColor: theme.palette.button.primary,
+                        borderRadius: "0.5rem",
+                      }}
+                      size="sm"
+                      onClick={() => {
+                        setModalData((prev) => ({
+                          type: 4,
+                          value: projectEecPd,
+                        }));
+                        setOpen(projectEecPd ? true : false);
+                      }}
+                    >
+                      <FaCheck />
+                    </IconButton>
+                  </Stack>
+                )}
+              </Box>
+            </Stack>
+          </>
+        ) : null}
+      </Stack>
+      {open ? (
+        <ConfirmSave open={true} setOpen={setOpen} data={modalData} />
+      ) : null}
     </Sheet>
   );
 };
