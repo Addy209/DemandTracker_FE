@@ -18,20 +18,39 @@ const Demand = ({ index, setDemandDetails }) => {
         setDemandDetails={setDemandDetails}
       />
       <Stack
-        direction={"row"}
-        sx={{ pl: 8, pr: 3, pt: 1, mt: 1, height: "80vh" }}
+        direction={"column"}
         gap={2}
+        sx={{
+          width: "100%",
+          height: "100%",
+          overflowY: "scroll",
+          pl: 8,
+          pr: 3,
+          pt: 1,
+          mt: 1,
+        }}
       >
-        <Stack direction={"column"} gap={2} width={"40%"} height={"100%"}>
-          <Box>
-            <DemandDetails demandDetails={demand} />
-          </Box>
-          <Box sx={{ flex: 1, overflowY: "auto" }}>
+        <Stack
+          direction={"row"}
+          sx={{
+            height: "85dvh",
+          }}
+          gap={2}
+        >
+          <Stack direction={"column"} gap={2} width={"40%"} height={"100%"}>
+            <Box>
+              <DemandDetails demandDetails={demand} />
+            </Box>
+            <Box sx={{ flex: 1, overflowY: "auto" }}>
+              <Meta demandDetails={demand} height={"100%"} />
+            </Box>
+          </Stack>
+
+          <Box sx={{ width: "60%", overflowY: "auto" }}>
             <Meta demandDetails={demand} height={"100%"} />
           </Box>
         </Stack>
-
-        <Box sx={{ width: "60%" }}>
+        <Box sx={{ width: "100%" }}>
           <Meta demandDetails={demand} height={"100%"} />
         </Box>
       </Stack>

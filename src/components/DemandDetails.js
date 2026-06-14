@@ -80,7 +80,7 @@ const DemandDetails = ({ demandDetails }) => {
         sx={{ px: 1 }}
       >
         <Box>
-          <Typography level="title-lg" sx={{ textDecoration: "underline" }}>
+          <Typography level="title-md" sx={{ textDecoration: "underline" }}>
             Demand Details:
           </Typography>
         </Box>
@@ -102,7 +102,10 @@ const DemandDetails = ({ demandDetails }) => {
               }}
               size="lg"
             >
-              <BsFillCalendarDateFill color={theme.palette.text.primary} />
+              <BsFillCalendarDateFill
+                color={theme.palette.text.primary}
+                fontSize={"1.2rem"}
+              />
             </IconButton>
           </Tooltip>
         </Box>

@@ -1,6 +1,19 @@
 import React from "react";
 import { getMetaListByProjectId } from "../utils/APIs/meta";
-import { Box, Sheet, useTheme } from "@mui/joy";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Sheet,
+  Stack,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/joy";
+import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { RiEditFill } from "react-icons/ri";
+import { MdDelete } from "react-icons/md";
+import { cleanHTMLString } from "../utils/utilFunc";
 
 const Meta = ({ demandDetails, height }) => {
   const [metaList, setMetaList] = React.useState([]);
@@ -26,6 +39,43 @@ const Meta = ({ demandDetails, height }) => {
         height: height,
       }}
     >
+      <Stack
+        direction={"row"}
+        sx={{ px: 1 }}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
+        <Box>
+          <Typography level="title-md" sx={{ textDecoration: "underline" }}>
+            Important Updates:
+          </Typography>
+        </Box>
+        <Box>
+          <Tooltip
+            title="Add Update"
+            placement="left"
+            size="sm"
+            arrow
+            variant="solid"
+          >
+            <IconButton
+              sx={{
+                transition: "scale 0.2s ease-in",
+                "&:hover": {
+                  backgroundColor: "transparent",
+                  scale: 0.9,
+                },
+              }}
+              size="md"
+            >
+              <MdOutlinePlaylistAdd
+                color={theme.palette.text.primary}
+                fontSize={"1.5rem"}
+              />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Stack>
       <Box
         sx={{
           position: "absolute",
@@ -42,14 +92,87 @@ const Meta = ({ demandDetails, height }) => {
           height: height,
           scrollbarWidth: "none",
           scrollbarColor: "#888 #f1f1f1",
+          px: 2,
+          py: 1,
         }}
       >
         {metaList.map((item) => {
+          const date = new Date(item.updatedAt);
           return (
-            <div>
-              <p>{item.fieldName}</p>
-              <p>{item.fieldValue}</p>
-            </div>
+            <Stack
+              direction={"column"}
+              justifyContent={"center"}
+              alignItems={"flex-start"}
+              py={0.5}
+            >
+              <Typography level="title-sm">{item.fieldName}:</Typography>
+              <Box
+                dangerouslySetInnerHTML={{
+                  __html: cleanHTMLString(item.fieldValue),
+                }}
+                sx={{
+                  fontSize: "0.9rem",
+                  color: theme.palette.text.secondary,
+                  textAlign: "left",
+                  wordBreak: "break-word",
+                  whiteSpace: "wrap",
+                }}
+              />
+              <Stack
+                direction={"row"}
+                justifyContent={"space-between"}
+                py={1}
+                alignItems={"center"}
+                width={"100%"}
+              >
+                <Box>
+                  <Typography
+                    level="body-xs"
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
+                    {date.toISOString().split(".")[0].replace("T", " at ")}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Tooltip title="Edit Update" placement="top" arrow size="sm">
+                    <IconButton
+                      size="sm"
+                      sx={{
+                        backgroundColor: "transparent",
+                        color: theme.palette.text.secondary,
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                          color: theme.palette.text.secondary,
+                        },
+                      }}
+                    >
+                      <RiEditFill />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    title="Delete Update"
+                    placement="top"
+                    arrow
+                    size="sm"
+                  >
+                    <IconButton
+                      size="sm"
+                      sx={{
+                        backgroundColor: "transparent",
+                        color: theme.palette.text.secondary,
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                          color: theme.palette.text.secondary,
+                        },
+                      }}
+                    >
+                      <MdDelete />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </Stack>
+              <Divider></Divider>
+            </Stack>
           );
         })}
       </Box>

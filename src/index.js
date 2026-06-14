@@ -16,6 +16,7 @@ const theme = extendTheme({
           primary: "#e2e8f0",
           secondary: "#64748b",
           tertiary: "#0c0e14",
+          legibile: "#bcb9b9",
         },
         background: {
           body: "#0c0e14",

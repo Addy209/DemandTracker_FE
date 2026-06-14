@@ -13,3 +13,28 @@ export const accentColor = [
   "#94a3b8",
   "#bc3030",
 ];
+
+const DOCUMENT = "document";
+const DOCUMENTS = "documents";
+const DETAIL = "detail";
+
+export const StatusFileMapper = {
+  2: [
+    { name: "EIS Solution Document", type: DOCUMENT },
+    { name: "EIS Solution Document Sign-off Mail", type: DOCUMENT },
+  ],
+  3: [{ name: "ISD IPA Document", type: DOCUMENT }],
+  4: [
+    { name: "UAT URL", type: DETAIL },
+    { name: "Request and Response", type: DOCUMENTS },
+  ],
+  5: [
+    { name: "UAT Sign-off Mail", type: DOCUMENT },
+    { name: "Sign-off RRN", type: DETAIL },
+  ],
+  6: [
+    { name: "ISD Sign-off", type: DOCUMENT },
+    { name: "API Security CheckList", type: DOCUMENTS },
+    { name: "Production URL", type: DETAIL },
+  ],
+};
