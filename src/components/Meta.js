@@ -96,7 +96,7 @@ const Meta = ({ demandDetails, height }) => {
           py: 1,
         }}
       >
-        {metaList.map((item) => {
+        {metaList.map((item, index) => {
           const date = new Date(item.updatedAt);
           return (
             <Stack
@@ -104,6 +104,7 @@ const Meta = ({ demandDetails, height }) => {
               justifyContent={"center"}
               alignItems={"flex-start"}
               py={0.5}
+              key={index}
             >
               <Typography level="title-sm">{item.fieldName}:</Typography>
               <Box

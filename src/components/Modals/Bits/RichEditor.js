@@ -3,7 +3,7 @@ import { MAX_CAHRACTERS_IN_DEMAND_CREATE } from "../../../utils/constants";
 import { FaItalic, FaBold, FaUnderline } from "react-icons/fa";
 import { Box, IconButton, Stack, Typography, useTheme } from "@mui/joy";
 
-const RichEditor = ({ setValue, width, placeholder }) => {
+const RichEditor = ({ setValue, width, placeholder, height }) => {
   const theme = useTheme();
   const [charCount, setCharCount] = React.useState(0);
   const [isEmpty, setIsEmpty] = React.useState(true);
@@ -78,7 +78,7 @@ const RichEditor = ({ setValue, width, placeholder }) => {
         }}
         sx={{
           ...style,
-          height: "25dvh",
+          height: height || "25dvh",
           width: "100%",
           maxHeight: "25dvh",
           overflowY: "scroll",
@@ -86,7 +86,7 @@ const RichEditor = ({ setValue, width, placeholder }) => {
           // p: 1,
           padding: "0.5rem 0.5rem 2.5rem 0.5rem",
           "&::before": {
-            content: `"Demand Description"`,
+            content: `"${placeholder}"`,
             display: isEmpty ? "block" : "none",
             position: "absolute",
             top: 8,

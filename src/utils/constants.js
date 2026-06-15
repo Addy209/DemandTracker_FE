@@ -14,11 +14,12 @@ export const accentColor = [
   "#bc3030",
 ];
 
-const DOCUMENT = "document";
-const DOCUMENTS = "documents";
-const DETAIL = "detail";
+export const DOCUMENT = "DOCUMENT";
+export const DOCUMENTS = "DOCUMENTS";
+export const DETAIL = "DETAIL";
 
 export const StatusFileMapper = {
+  1: [],
   2: [
     { name: "EIS Solution Document", type: DOCUMENT },
     { name: "EIS Solution Document Sign-off Mail", type: DOCUMENT },
@@ -26,6 +27,7 @@ export const StatusFileMapper = {
   3: [{ name: "ISD IPA Document", type: DOCUMENT }],
   4: [
     { name: "UAT URL", type: DETAIL },
+    { name: "TFS Path", type: DETAIL },
     { name: "Request and Response", type: DOCUMENTS },
   ],
   5: [
@@ -33,8 +35,13 @@ export const StatusFileMapper = {
     { name: "Sign-off RRN", type: DETAIL },
   ],
   6: [
-    { name: "ISD Sign-off", type: DOCUMENT },
-    { name: "API Security CheckList", type: DOCUMENTS },
+    { name: "ISD Sign-off", type: DOCUMENTS },
+    { name: "API Security CheckList", type: DOCUMENT },
     { name: "Production URL", type: DETAIL },
   ],
 };
+
+export const STATUS = "STATUS";
+export const CR = "CR";
+export const EEC_DONE = "EEC_DONE";
+export const EEC_PD = "EEC_PD";

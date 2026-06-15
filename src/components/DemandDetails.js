@@ -15,7 +15,14 @@ import React from "react";
 import { useStatus } from "../store/state";
 import { getDemandById } from "../utils/APIs/project";
 import { BsFillCalendarDateFill } from "react-icons/bs";
-import { COMPLETED_VALUE, UAT_START_VALUE } from "../utils/constants";
+import {
+  COMPLETED_VALUE,
+  CR,
+  EEC_DONE,
+  EEC_PD,
+  STATUS,
+  UAT_START_VALUE,
+} from "../utils/constants";
 import { FaCheck } from "react-icons/fa";
 import ConfirmSave from "./Modals/ConfirmSave";
 
@@ -23,12 +30,17 @@ const DemandDetails = ({ demandDetails }) => {
   const theme = useTheme();
   const [demand, setDemand] = React.useState(demandDetails);
   const { status } = useStatus();
-  const [projectStatus, setProjectStatus] = React.useState(null);
+  const [projectStatus, setProjectStatus] = React.useState(
+    demandDetails.status,
+  );
   const [projectCR, setProjectCR] = React.useState(null);
   const [projectEecDone, setProjectEecDone] = React.useState(null);
   const [projectEecPd, setProjectEecPd] = React.useState(null);
   const [open, setOpen] = React.useState(false);
-  const [modalData, setModalData] = React.useState({ value: "", type: "" });
+  const [modalData, setModalData] = React.useState({
+    value: "",
+    type: "",
+  });
 
   React.useEffect(() => {
     const fetchDemandDetails = async (id) => {
@@ -136,9 +148,17 @@ const DemandDetails = ({ demandDetails }) => {
                 <Select
                   size="sm"
                   placeholder={"Change Status"}
-                  defaultValue={demand.status}
+                  defaultValue={projectStatus}
+                  value={projectStatus}
                   onChange={(e, value) => {
-                    setProjectStatus(value);
+                    const diff = value - projectStatus;
+                    if (diff === 1) {
+                      setProjectStatus(value);
+                    } else {
+                      alert("Please Go Sequentially");
+                      e.preventDefault();
+                    }
+                    // console.log(diff, value, projectStatus);
                   }}
                   sx={{
                     ...style,
@@ -164,7 +184,7 @@ const DemandDetails = ({ demandDetails }) => {
                   color="neutral"
                 >
                   {Object.keys(status).map((item) => {
-                    console.log(demand.status, item);
+                    // console.log(demand.status, item);
 
                     return (
                       <Option
@@ -203,7 +223,7 @@ const DemandDetails = ({ demandDetails }) => {
                   size="sm"
                   onClick={() => {
                     setModalData((prev) => ({
-                      type: 1,
+                      type: STATUS,
                       value: projectStatus,
                       label: status[projectStatus],
                     }));
@@ -292,7 +312,7 @@ const DemandDetails = ({ demandDetails }) => {
                   }}
                   size="sm"
                   onClick={() => {
-                    setModalData((prev) => ({ type: 2, value: projectCR }));
+                    setModalData((prev) => ({ type: CR, value: projectCR }));
                     setOpen(projectCR ? true : false);
                   }}
                 >
@@ -394,7 +414,7 @@ const DemandDetails = ({ demandDetails }) => {
                       size="sm"
                       onClick={() => {
                         setModalData((prev) => ({
-                          type: 3,
+                          type: EEC_DONE,
                           value: projectEecDone,
                           label: "Yes",
                         }));
@@ -451,7 +471,7 @@ const DemandDetails = ({ demandDetails }) => {
                       size="sm"
                       onClick={() => {
                         setModalData((prev) => ({
-                          type: 4,
+                          type: EEC_PD,
                           value: projectEecPd,
                         }));
                         setOpen(projectEecPd ? true : false);
@@ -467,7 +487,11 @@ const DemandDetails = ({ demandDetails }) => {
         ) : null}
       </Stack>
       {open ? (
-        <ConfirmSave open={true} setOpen={setOpen} data={modalData} />
+        <ConfirmSave
+          open={true}
+          setOpen={setOpen}
+          data={{ ...modalData, projectId: demandDetails.projectId }}
+        />
       ) : null}
     </Sheet>
   );
