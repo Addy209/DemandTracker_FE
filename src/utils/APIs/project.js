@@ -39,3 +39,17 @@ export const getDemandById = async (projectId) => {
     return { proceed: false };
   }
 };
+
+export const updateStatus = async (data) => {
+  try {
+    const response = await API.post("/projects/updateStatus", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return { ...response.data };
+  } catch (error) {
+    console.error("Error creating project:", error);
+    return { proceed: false };
+  }
+};

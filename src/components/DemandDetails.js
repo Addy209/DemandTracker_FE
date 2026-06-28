@@ -41,6 +41,7 @@ const DemandDetails = ({ demandDetails }) => {
     value: "",
     type: "",
   });
+  //   const [reload, setReload] = React.useState(false);
 
   React.useEffect(() => {
     const fetchDemandDetails = async (id) => {

@@ -9,11 +9,14 @@ import Sheet from "@mui/joy/Sheet";
 import { FaFileUpload } from "react-icons/fa";
 import { Box, Input, Stack, useTheme } from "@mui/joy";
 import { IoMdClose } from "react-icons/io";
+import { DOCUMENT, DOCUMENTS } from "../../../utils/constants";
 
 export default function FileUpload(props) {
   const theme = useTheme();
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [view, setView] = React.useState(false);
+
+  console.log(props);
 
   // Handle file selection from the native file dialog
   const handleFileChange = (event) => {
@@ -21,8 +24,16 @@ export default function FileUpload(props) {
     if (files.length > 0) {
       // Append new files to our existing state array
       setSelectedFiles((prevFiles) => {
-        props.updater(props.index, [...prevFiles, ...files]);
-        return [...prevFiles, ...files];
+        if (props.type === DOCUMENTS) {
+          props.updater(props.index, [...prevFiles, ...files]);
+          return [...prevFiles, ...files];
+        } else if (props.type === DOCUMENT) {
+          props.updater(props.index, files);
+          return files;
+        } else {
+          props.updater(props.index, prevFiles);
+          return prevFiles;
+        }
       });
     }
   };
@@ -46,11 +57,26 @@ export default function FileUpload(props) {
         boxShadow: "md",
       }}
     >
-      <Stack direction={"row"} alignItems={"center"}>
-        <Box sx={{ width: "25%", display: "flex", justifyContent: "center" }}>
+      <Stack direction={"row"} alignItems={"center"} justifyContent={"center"}>
+        <Box
+          sx={{
+            width: "20%",
+            display: "flex",
+            justifyContent: "flex-start",
+            alignContent: "center",
+          }}
+        >
           <Typography level="title-md">{props.fieldName}</Typography>
         </Box>
-        <Box>
+        <Box
+          sx={{
+            width: "5%",
+            display: "flex",
+            height: "100%",
+            justifyContent: "center",
+            alignContent: "center",
+          }}
+        >
           <Typography level="h4" component="title-lg" mb={2}>
             &nbsp;:&nbsp;
           </Typography>
@@ -63,10 +89,11 @@ export default function FileUpload(props) {
             color="neutral"
             component="label"
             tabIndex={-1}
+            size="lg"
             sx={{
               width: "80%",
-              borderStyle: "solid",
-              p: 2,
+              p: 1,
+              borderStyle: "dashed",
               backgroundColor: theme.palette.button.primary,
             }}
           >
@@ -80,6 +107,7 @@ export default function FileUpload(props) {
                 clip: "rect(0 0 0 0)",
                 clipPath: "inset(50%)",
                 height: 1,
+                visibility: "hidden",
                 overflow: "hidden",
                 position: "absolute",
                 bottom: 0,
@@ -93,11 +121,10 @@ export default function FileUpload(props) {
           <Button
             variant="outlined"
             color="neutral"
-            component="label"
             tabIndex={-1}
             sx={{
               width: "20%",
-              borderStyle: "solid",
+              borderStyle: "dashed",
               p: 2,
               backgroundColor: theme.palette.button.primary,
             }}
@@ -111,7 +138,7 @@ export default function FileUpload(props) {
             sx={{
               position: "absolute",
               top: "2.5rem",
-              left: "50%",
+              left: "75%",
               width: "75%",
               zIndex: 10,
             }}
@@ -125,6 +152,7 @@ export default function FileUpload(props) {
                   overflow: "scroll",
                   scrollbarWidth: "none",
                   maxHeight: "20vh",
+                  width: "50%",
                 }}
               >
                 {selectedFiles.map((file, index) => (

@@ -11,10 +11,10 @@ const MetaInputForConfirmSave = (props) => {
   };
   return (
     <Stack direction={"row"} width={"100%"} alignItems={"center"} mt={2}>
-      <Box sx={{ width: "25%", display: "flex", justifyContent: "center" }}>
+      <Box sx={{ width: "20%", display: "flex", justifyContent: "flex-start" }}>
         <Typography level="title-md">{props.fieldName}</Typography>
       </Box>
-      <Box>
+      <Box sx={{ width: "5%", display: "flex", justifyContent: "center" }}>
         <Typography level="h4">&nbsp;:&nbsp;</Typography>
       </Box>
       <Box sx={{ width: "75%" }}>

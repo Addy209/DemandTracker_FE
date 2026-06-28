@@ -8,6 +8,7 @@ import {
 import { Box, Button, ButtonGroup, Input, Stack, useTheme } from "@mui/joy";
 import FileUpload from "./FileUpload";
 import MetaInputForConfirmSave from "./MetaInputForConfirmSave";
+import { updateStatus } from "../../../utils/APIs/project";
 
 const StatusSaveForm = ({ data }) => {
   const theme = useTheme();
@@ -28,7 +29,26 @@ const StatusSaveForm = ({ data }) => {
       return newArr;
     });
   };
-  console.log(data, formValues);
+
+  const handleStatusSave = async () => {
+    let submitData = {
+      projectId: data.projectId,
+      newStatus: data.value,
+    };
+    const fd = new FormData();
+    for (let val of formValues) {
+      val["fileCount"] = val.fieldValue.length;
+      for (let file of val.fieldValue) {
+        fd.append("files", file);
+      }
+      //   console.log(fd.entries());
+    }
+    submitData["additionalDetails"] = formValues;
+    console.log(submitData);
+    fd.append("data", JSON.stringify(submitData));
+    const result = await updateStatus(fd);
+    // console.log(result);
+  };
 
   return (
     <Stack direction={"column"} width={"100%"}>
@@ -54,6 +74,7 @@ const StatusSaveForm = ({ data }) => {
                 index={index}
                 fieldName={val.name}
                 updater={dataUpdater}
+                type={DOCUMENT}
               />
             );
           }
@@ -65,6 +86,7 @@ const StatusSaveForm = ({ data }) => {
                 fieldName={val.name}
                 updater={dataUpdater}
                 multiple={true}
+                type={DOCUMENTS}
               />
             );
           }
@@ -83,7 +105,7 @@ const StatusSaveForm = ({ data }) => {
               },
             }}
             onClick={() => {
-              console.log(formValues);
+              handleStatusSave();
             }}
           >
             Confirm
