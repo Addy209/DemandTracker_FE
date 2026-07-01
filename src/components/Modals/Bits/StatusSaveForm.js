@@ -9,10 +9,13 @@ import { Box, Button, ButtonGroup, Input, Stack, useTheme } from "@mui/joy";
 import FileUpload from "./FileUpload";
 import MetaInputForConfirmSave from "./MetaInputForConfirmSave";
 import { updateStatus } from "../../../utils/APIs/project";
+import { fetchStatusFileMapping } from "../../../utils/APIs/statusfilemapper";
+import { useStatusFileMapping } from "../../../store/state";
 
-const StatusSaveForm = ({ data }) => {
+const StatusSaveForm = ({ data, setOpen }) => {
   const theme = useTheme();
-  const current = StatusFileMapper[data.value];
+  const { StatusFileMapping } = useStatusFileMapping();
+  const current = StatusFileMapping[data.value];
   const stateDefaultValue = current.map((val) => {
     return {
       fieldName: val.name,
@@ -110,7 +113,9 @@ const StatusSaveForm = ({ data }) => {
           >
             Confirm
           </Button>
-          <Button variant="solid">Cancel</Button>
+          <Button variant="solid" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
         </ButtonGroup>
       </Stack>
     </Stack>

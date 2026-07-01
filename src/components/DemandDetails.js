@@ -153,13 +153,12 @@ const DemandDetails = ({ demandDetails }) => {
                   value={projectStatus}
                   onChange={(e, value) => {
                     const diff = value - projectStatus;
-                    if (diff === 1) {
+                    if (diff === 1 || value === demand.status) {
                       setProjectStatus(value);
                     } else {
                       alert("Please Go Sequentially");
                       e.preventDefault();
                     }
-                    // console.log(diff, value, projectStatus);
                   }}
                   sx={{
                     ...style,
@@ -223,6 +222,9 @@ const DemandDetails = ({ demandDetails }) => {
                   }}
                   size="sm"
                   onClick={() => {
+                    if (projectStatus === demand.status) {
+                      return;
+                    }
                     setModalData((prev) => ({
                       type: STATUS,
                       value: projectStatus,

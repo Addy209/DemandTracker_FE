@@ -31,3 +31,10 @@ export const useDemands = create((set) => {
     setStats: (dashboardStats) => set({ stats: dashboardStats }),
   };
 });
+
+export const useStatusFileMapping = create((set) => {
+  return {
+    StatusFileMapping: [],
+    setSFM: (data) => set({ StatusFileMapping: data }),
+  };
+});

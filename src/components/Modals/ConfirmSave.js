@@ -109,7 +109,7 @@ const ConfirmSave = ({ open, setOpen, data }) => {
             alignItems={"center"}
           >
             {data.type === STATUS && data.value > 1 ? (
-              <StatusSaveForm data={data} />
+              <StatusSaveForm data={data} setOpen={setOpen} />
             ) : (
               <>
                 {getDisplayMessage(
@@ -127,7 +127,9 @@ const ConfirmSave = ({ open, setOpen, data }) => {
                   >
                     Confirm
                   </Button>
-                  <Button variant="solid">Cancel</Button>
+                  <Button variant="solid" onClick={() => setOpen(false)}>
+                    Cancel
+                  </Button>
                 </ButtonGroup>
               </>
             )}

@@ -6,8 +6,13 @@ import {
   GrCheckmark,
   GrSettingsOption,
 } from "react-icons/gr";
-import { useActiveIndexStore, useUserStore } from "../store/state";
+import {
+  useActiveIndexStore,
+  useStatusFileMapping,
+  useUserStore,
+} from "../store/state";
 import UserProfile from "./Modals/UserProfile";
+import { fetchAllStatusFileMapping } from "../utils/APIs/statusfilemapper";
 
 const menuItems = [
   { icon: <GrProjects size={14} />, label: "Demands" },
@@ -22,7 +27,16 @@ const SideBar = () => {
   const { activeIndex, setActiveIndex } = useActiveIndexStore();
   const [profileOpen, setProfileOpen] = React.useState(false);
   const { user } = useUserStore();
-  console.log(user);
+  const { setSFM } = useStatusFileMapping();
+  React.useEffect(() => {
+    const fetchASFM = async () => {
+      const resp = await fetchAllStatusFileMapping();
+      if (resp.status) {
+        setSFM(resp.payload);
+      }
+    };
+    fetchASFM();
+  }, []);
 
   const handleMenuClick = (index) => {
     setActiveIndex(index);
